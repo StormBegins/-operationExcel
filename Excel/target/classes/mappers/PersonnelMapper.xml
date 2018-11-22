@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nf147.dao.PersonnelMapper">
+  <resultMap id="BaseResultMap" type="com.nf147.entity.Personnel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="wages" jdbcType="DOUBLE" property="wages" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from personnel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.nf147.entity.Personnel">
+    insert into personnel (id, name, sex, education, 
+      wages)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{education,jdbcType=VARCHAR}, 
+      #{wages,jdbcType=DOUBLE})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nf147.entity.Personnel">
+    update personnel
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      education = #{education,jdbcType=VARCHAR},
+      wages = #{wages,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, sex, education, wages
+    from personnel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, sex, education, wages
+    from personnel
+  </select>
+  <select id="selectby" parameterType="string">
+  select * from personnel into outfile #{src} character set gbk
+  </select>
+  <select id="daoru" parameterType="string">
+  load data local infile #{src} into table personnel character set gbk;
+  </select>
+  <insert id="add" parameterType="int">
+    insert into personnel (id, name, sex,
+    education, wages)
+    values
+    <foreach collection="list" item="e" separator=",">
+      (#{e.id,jdbcType=INTEGER}, #{e.name,jdbcType=VARCHAR}, #{e.sex,jdbcType=VARCHAR},
+      #{e.education,jdbcType=VARCHAR}, #{e.wages,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>
